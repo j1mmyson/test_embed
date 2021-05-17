@@ -9,8 +9,11 @@ import (
 
 var tpl *template.Template
 
-//go:embed templates/*
+//go:embed templates
 var content embed.FS
+
+//go:embed static
+var staticContent embed.FS
 
 func init() {
 	fmt.Println(content.ReadDir("."))
@@ -20,6 +23,7 @@ func init() {
 func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/second", second)
+	http.Handle("/static/", http.FileServer(http.FS(staticContent)))
 	http.ListenAndServe(":8080", nil)
 
 }
